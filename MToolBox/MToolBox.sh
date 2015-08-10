@@ -1,5 +1,4 @@
 #!/bin/bash
-# FAKE CHANGE, JUST FOR TEH LULZ
 
 check_exit_status()
 {
@@ -54,10 +53,18 @@ version()
 	echo $VERSION
 }
 
+check_software_paths()
+{
+which $1
+if [[ $(echo $?) == 0 ]]
+then
+	export $1exe=$(which $1)
+else
+	export $1exe=/usr/local/bin/$1
+fi
+}
+
 # Default command lines and behaviours for scripts and programs used in the workflow
-#assembleMTgenome_OPTS=""
-#mt_classifier_OPTS=""
-#mapExome_OPTS=""
 UseMarkDuplicates=false
 UseIndelRealigner=false
 MitoExtraction=false
@@ -66,20 +73,23 @@ me=`basename $0`
 export mtoolbox_folder=$(which $me | sed "s/$me//g")
 export externaltoolsfolder=${mtoolbox_folder}ext_tools/
 
-
-# Environment variables for executables and files required by MToolBox
+##### Environment variables for executables and files required by MToolBox
 export ref=RSRS
 export fasta_path=/usr/local/share/genomes/
 export mtdb_fasta=chrRSRS.fa
 export hg19_fasta=hg19RSRS.fa
-export gsnapexe=/usr/local/bin/gsnap
 export gsnapdb=/usr/local/share/gmapdb/
 export mtdb=chrRSRS
 export humandb=hg19RSRS
-export samtoolsexe=/usr/local/bin/samtools
-export muscleexe=/usr/local/bin/muscle
 
+# Any gsnap/samtools/muscle imported from other path?
+check_software_paths gsnap
+check_software_paths samtools
+check_software_paths muscle
 
+#####
+
+# Parsing MToolBox.sh options
 while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
 	case $opt in
 		h)
@@ -150,21 +160,6 @@ then
 	exit 1
 fi
 
-
-# The following lines are commented since the involved parameters
-# are specified elsewhere
-#
-# Set thresholds for hf and tail
-#export hfthreshold=0.8
-#export taillength=7
-#
-
-#if (( $taillength < 5 ))
-#then
-#	echo "Minumum tail length required >= 5. Tail length will be set to 5."
-#	export taillength=5
-#i
-
 # Check python version (2.7 required)
 echo ""
 echo "Check python version... (2.7 required)"
@@ -182,8 +177,6 @@ fi
 
 # Check existence of files to be used in the pipeline; if any of them does not exist, the pipeline will be aborted.
 echo "Checking files to be used in MToolBox execution..."
-
-#-t ${mt_classifier_OPTS} \
 
 check_files.py \
 --assembleMTgenome_OPTS="${assembleMTgenome_OPTS}" \
