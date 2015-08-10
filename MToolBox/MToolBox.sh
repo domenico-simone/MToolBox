@@ -1,18 +1,20 @@
 #!/bin/bash
 
-check_exit_status()
-{
-rc=$?
-if [[ $rc != 0 ]]
-then
-	echo ""
-	echo "The last process reported an error. Exit."
-	exit $rc
-else
-	echo "Success."
-	echo ""
-fi
-}
+set -e
+
+#check_exit_status()
+#{
+#rc=$?
+#if [[ $rc != 0 ]]
+#then
+#	echo ""
+#	echo "The last process reported an error. Exit."
+#	exit $rc
+#else
+#	echo "Success."
+#	echo ""
+#fi
+#}
 
 usage()
 {
@@ -356,7 +358,7 @@ fastq_input()
 	INPUT=OUT.sam \
 	OUTPUT=OUT.sam.bam \
 	TMP_DIR=`pwd`/tmp; cd ..; done
-	check_exit_status
+	#check_exit_status
 	# INDEXING BAM FILES WITH SAMTOOLS
 	for i in $(ls -d OUT_*); do cd ${i}; ${samtoolsexe} index OUT.sam.bam; cd ..; done
 	
@@ -378,7 +380,8 @@ fastq_input()
 		-targetIntervals ${mtoolbox_folder}/data/intervals_file_${ref}.list  \
 		-known ${mtoolbox_folder}/data/MITOMAP_HMTDB_known_indels_${ref}.vcf \
 		-compress 0;
-		check_exit_status; cd ..; done
+		#check_exit_status;
+		cd ..; done
 	else
 		for i in $(ls -d OUT_*); do cd ${i}; cat OUT.sam.bam > OUT.realigned.bam; cd ..; done
 	fi
@@ -464,7 +467,7 @@ fasta_input()
 				#for i in $(ls); do bname=$(echo ${i} | awk 'BEGIN{FS="."}{print $1}'); bname_dir=OUT_${bname}; mkdir ${bname_dir}; cp ${i} ${bname_dir}/${bname}-contigs.fasta; done
 			fi				
 		fi
-		check_exit_status
+		#check_exit_status
 	fi	
 	echo ""
 	echo "##### PREDICTING HAPLOGROUPS AND ANNOTATING/PRIORITIZING VARIANTS..."
