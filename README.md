@@ -178,6 +178,8 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 
 ```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar.
 
+```-s``` (*mapExome.py*) to set gmap as the read aligner. Default is to use gsnap.
+
 ```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8.
 
 ```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values >= 5 are allowed.
