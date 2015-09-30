@@ -101,7 +101,7 @@ if use_gsnap == False:
 	print map1cmd
 	os.system(map1cmd)
 	for k in fD.keys(): # remove uncompressed files after alignment
-		if fD[k]:
+		if k.endswith(".gz") or k.endswith(".bz") or k.endswith(".bz2"):
 			os.remove(fD[k])
 else:
 	if fastq2!=None and fastq3!=None:
