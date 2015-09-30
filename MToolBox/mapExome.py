@@ -89,6 +89,8 @@ if use_gsnap == False:
 			elif p.endswith(".bz") or p.endswith(".bz2"):
 				os.system("bzip2 -dc %s > %s" % (p, '.'.join(p.split(".")[:-1])))
 				fD[p] = '.'.join(p.split(".")[:-1])
+			else:
+				fD[p] = p
 	if fastq2!=None and fastq3!=None:
 		map1cmd='%s -D %s -d %s -f samse --nofails %s -n 1 -O -t %i %s %s %s > %s 2> %s' %(gsnapexe,gsnapdb,mtdb,RG_tag,thread,fD[fastq1],fD[fastq2],fD[fastq3],os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
 	elif fastq2!=None and fastq3== None:
